@@ -1,11 +1,22 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../DataTable';
 import { MOCK_OWNER_DETAILS } from '../../constants';
 import type { OwnerDetails } from '../../types';
 
 const OwnersPage: React.FC = () => {
-    const [ownerDetails, setOwnerDetails] = useState<OwnerDetails[]>(MOCK_OWNER_DETAILS);
+    const [ownerDetails, setOwnerDetails] = useState<OwnerDetails[]>(() => {
+      try {
+        const saved = localStorage.getItem('ownerDetails');
+        return saved ? JSON.parse(saved) : MOCK_OWNER_DETAILS;
+      } catch (error) {
+        console.error('Failed to parse owner details from localStorage', error);
+        return MOCK_OWNER_DETAILS;
+      }
+    });
+
+    useEffect(() => {
+      localStorage.setItem('ownerDetails', JSON.stringify(ownerDetails));
+    }, [ownerDetails]);
 
   const columns = [
     { accessor: 'sn' as keyof OwnerDetails, header: 'S.N.' },

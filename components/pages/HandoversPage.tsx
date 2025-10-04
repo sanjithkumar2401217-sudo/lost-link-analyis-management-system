@@ -1,11 +1,22 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../DataTable';
 import { MOCK_HANDOVER_DETAILS } from '../../constants';
 import type { HandoverDetails } from '../../types';
 
 const HandoversPage: React.FC = () => {
-  const [handoverDetails, setHandoverDetails] = useState<HandoverDetails[]>(MOCK_HANDOVER_DETAILS);
+  const [handoverDetails, setHandoverDetails] = useState<HandoverDetails[]>(() => {
+    try {
+      const saved = localStorage.getItem('handoverDetails');
+      return saved ? JSON.parse(saved) : MOCK_HANDOVER_DETAILS;
+    } catch (error) {
+      console.error('Failed to parse handover details from localStorage', error);
+      return MOCK_HANDOVER_DETAILS;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('handoverDetails', JSON.stringify(handoverDetails));
+  }, [handoverDetails]);
 
   const columns = [
     { accessor: 'sn' as keyof HandoverDetails, header: 'S.N.' },
