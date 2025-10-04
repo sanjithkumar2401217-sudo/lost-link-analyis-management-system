@@ -1,0 +1,5 @@
+{
+  "name": "Lost Link Analysis Management System",
+  "description": "A dashboard to help manage and analyze lost and found items. It includes features for managing items, owners, and handovers, along with analytics and reporting.",
+  "requestFramePermissions": []
+}
