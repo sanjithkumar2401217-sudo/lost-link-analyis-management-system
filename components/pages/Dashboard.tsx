@@ -90,7 +90,8 @@ const Dashboard: React.FC<DashboardProps> = ({ lostItems, foundItems }) => {
                 <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                         {/* FIX: Handle potentially undefined `percent` property from recharts Pie component to prevent type error. */}
-                        <Pie data={pieData} cx="50%" cy="50%" labelLine={false} outerRadius={100} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
+                        {/* FIX: Replaced nullish coalescing operator with a more robust typeof check to ensure percent is a number before arithmetic operation. */}
+                        <Pie data={pieData} cx="50%" cy="50%" labelLine={false} outerRadius={100} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${((typeof percent === 'number' ? percent : 0) * 100).toFixed(0)}%`}>
                             {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                         </Pie>
                         <Tooltip contentStyle={{ backgroundColor: 'rgba(31, 41, 55, 0.8)', border: 'none', color: '#fff' }}/>
