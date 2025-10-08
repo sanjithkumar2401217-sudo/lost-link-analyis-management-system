@@ -17,12 +17,15 @@ const navItems = [
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const NavItem: React.FC<typeof navItems[0]> = ({ to, icon: Icon, label }) => (
-    // FIX: Updated NavLink to use v5 syntax with `activeClassName` and `exact` props instead of a function for `className`.
     <NavLink
       to={to}
-      exact
-      className="flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 transform rounded-lg hover:bg-primary-500 hover:text-white text-gray-600 dark:text-gray-300"
-      activeClassName="bg-primary-600 text-white"
+      className={({ isActive }) => 
+        `flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 transform rounded-lg hover:bg-primary-500 hover:text-white ${
+          isActive 
+            ? 'bg-primary-600 text-white' 
+            : 'text-gray-600 dark:text-gray-300'
+        }`
+      }
     >
       <Icon className="w-5 h-5" />
       <span className="mx-4">{label}</span>

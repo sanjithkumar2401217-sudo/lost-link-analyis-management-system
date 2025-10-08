@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-// FIX: Updated react-router-dom imports from v6 to v5 syntax to resolve module export errors.
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './components/pages/LoginPage';
 import MainLayout from './components/MainLayout';
 
@@ -34,29 +33,19 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
-      {/* FIX: Replaced v6 <Routes> component with v5 <Switch> and updated routing logic. */}
-      <Switch>
-        {!isAuthenticated ? (
+      <Routes>
+        {isAuthenticated ? (
           <>
-            <Route path="/login">
-              <LoginPage onLogin={handleLogin} />
-            </Route>
-            <Route path="*">
-              <Redirect to="/login" />
-            </Route>
+            <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/*" element={<MainLayout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} />} />
           </>
         ) : (
           <>
-            <Route path="/login">
-              <Redirect to="/dashboard" />
-            </Route>
-            {/* FIX: Changed path from `/*` to `/` for v5 compatibility. */}
-            <Route path="/">
-              <MainLayout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} />
-            </Route>
+            <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}
-      </Switch>
+      </Routes>
     </HashRouter>
   );
 };

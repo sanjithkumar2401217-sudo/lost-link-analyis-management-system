@@ -1,7 +1,6 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
-// FIX: Updated react-router-dom imports from v6 to v5 syntax to resolve module export errors.
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Dashboard from './pages/Dashboard';
@@ -59,30 +58,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ theme, toggleTheme, onLogout })
       <div className="flex flex-col flex-1 w-full overflow-hidden">
         <Header toggleTheme={toggleTheme} theme={theme} toggleSidebar={toggleSidebar} onLogout={onLogout} />
         <main className="flex-1 p-6 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
-          {/* FIX: Replaced v6 <Routes> component with v5 <Switch> and updated routing logic. */}
-          <Switch>
-            <Route exact path="/">
-              <Redirect to="/dashboard" />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard lostItems={lostItems} foundItems={foundItems} />
-            </Route>
-            <Route path="/lost-items">
-              <LostItemsPage items={lostItems} setItems={setLostItems} />
-            </Route>
-            <Route path="/found-items">
-              <FoundItemsPage items={foundItems} setItems={setFoundItems} />
-            </Route>
-            <Route path="/owner-details">
-              <OwnersPage />
-            </Route>
-            <Route path="/handover-details">
-              <HandoversPage />
-            </Route>
-            <Route path="*">
-              <Redirect to="/dashboard" />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard lostItems={lostItems} foundItems={foundItems} />} />
+            <Route path="/lost-items" element={<LostItemsPage items={lostItems} setItems={setLostItems} />} />
+            <Route path="/found-items" element={<FoundItemsPage items={foundItems} setItems={setFoundItems} />} />
+            <Route path="/owner-details" element={<OwnersPage />} />
+            <Route path="/handover-details" element={<HandoversPage />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
         </main>
       </div>
     </div>
